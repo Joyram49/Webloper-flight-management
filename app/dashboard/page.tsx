@@ -43,7 +43,7 @@ export default function DashboardPage() {
       try {
         const data = await fetchFlights(resolvedSearchParams);
         setFlights(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.log(err);
         setFlights(null);
       } finally {

@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       }),
       { status: 200 }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error(err);
     return new Response(
       JSON.stringify({

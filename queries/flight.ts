@@ -10,7 +10,7 @@ export const getAllFlight = async ({
 }): IFlightQueryParams => {
   const skip = (page - 1) * limit;
 
-  const query: any = {};
+  const query: unknown = {};
   if (searchTerm) {
     query.$or = [
       { flightNumber: { $regex: searchTerm, $options: "i" } },

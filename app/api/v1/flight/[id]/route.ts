@@ -29,7 +29,7 @@ export async function GET(
       }),
       { status: 200 }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     return new Response(
       JSON.stringify({
         statusCode: 500,

@@ -110,7 +110,7 @@ export default function AddNewFlghtForm({ onClose }: FlightFormProps) {
       }
       form.reset();
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error submitting flight: ", error);
       form.setError("global", {
         type: "manual",

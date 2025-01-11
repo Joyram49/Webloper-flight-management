@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       }),
       { status: 201 }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Handle server errors
     return new Response(
       JSON.stringify({

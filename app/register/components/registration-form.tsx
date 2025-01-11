@@ -109,7 +109,7 @@ export default function RegistrationForm() {
         form.reset();
         router.push("/login");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log(error.message);
       setGeneralError(error.message);
       form.reset();

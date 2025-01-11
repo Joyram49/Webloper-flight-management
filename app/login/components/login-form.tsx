@@ -75,7 +75,7 @@ function LoginForm() {
       } else {
         router.push("/dashboard");
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       setError(e.message || "internal server error");
     }
   }

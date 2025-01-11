@@ -26,7 +26,7 @@ function FlightDetailsModal({ flight, onClose }: FlightModalProps) {
           throw new Error(data.message || "Failed to fetch flight details.");
         }
         setSelectedFlight(data?.data);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error(error);
         setError(error.message || "An error occurred.");
       } finally {
