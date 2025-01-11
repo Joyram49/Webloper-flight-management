@@ -2,6 +2,7 @@ import dbConnect from "@/services/connectMongo";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { Suspense } from "react";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import "./globals.css";
@@ -37,7 +38,7 @@ export default async function RootLayout({
         <ThemeProvider>
           {/* <ThemeToggle /> */}
           <Header />
-          {children}
+          <Suspense fallback={<p>Loading dashboard...</p>}>{children}</Suspense>
           <Footer />
           <div id='portal-root'></div>
         </ThemeProvider>
