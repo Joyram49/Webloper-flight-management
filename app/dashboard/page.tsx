@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import FlightDashboardTable from "./components/flight-dashboard-table";
 
-const url = process.env.HOST_URL;
+const url = process.env.NEXT_PUBLIC_HOST_URL;
 
 async function fetchFlights(queryParams: Partial<IFlightQueryParams>) {
   const params = new URLSearchParams();
