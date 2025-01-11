@@ -13,7 +13,7 @@ async function fetchFlights(queryParams: Partial<IFlightQueryParams>) {
     if (value) params.append(key, value.toString());
   });
 
-  const apiUrl = `${url}/api/v1/flight?${params.toString()}`;
+  const apiUrl = `${url}api/v1/flight?${params.toString()}`;
   const response = await fetch(apiUrl);
   return response.json();
 }
