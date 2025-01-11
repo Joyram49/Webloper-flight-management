@@ -5,13 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import FlightDashboardTable from "./components/flight-dashboard-table";
 
+const url = process.env.HOST_URL;
+
 async function fetchFlights(queryParams: Partial<IFlightQueryParams>) {
   const params = new URLSearchParams();
   Object.entries(queryParams).forEach(([key, value]) => {
     if (value) params.append(key, value.toString());
   });
 
-  const apiUrl = `http://localhost:3000/api/v1/flight?${params.toString()}`;
+  const apiUrl = `${url}/api/v1/flight?${params.toString()}`;
   const response = await fetch(apiUrl);
   return response.json();
 }
