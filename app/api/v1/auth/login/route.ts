@@ -52,12 +52,12 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (err: unknown) {
-    console.error(err);
+    const errorMessage = err instanceof Error ? err.message : "Login failed";
     return new Response(
       JSON.stringify({
         statusCode: 500,
         success: false,
-        message: err.message ?? "Login failed",
+        message: errorMessage,
       }),
       { status: 500 }
     );

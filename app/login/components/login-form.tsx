@@ -75,8 +75,10 @@ function LoginForm() {
       } else {
         router.push("/dashboard");
       }
-    } catch (e: unknown) {
-      setError(e.message || "internal server error");
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "An error occurred";
+      setError(errorMessage);
     }
   }
 

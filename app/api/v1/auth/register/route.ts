@@ -4,6 +4,10 @@ import dbConnect from "@/services/connectMongo";
 import { IUser } from "@/types/interfaces";
 import bcrypt from "bcryptjs";
 
+interface TUser extends IUser {
+  password: string;
+}
+
 export async function POST(request: Request) {
   try {
     const { name, email, password } = await request.json();
@@ -28,7 +32,7 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const newUser = new User<IUser>({
+    const newUser = new User<TUser>({
       name,
       email,
       password: hashedPassword,
@@ -52,12 +56,13 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (err: unknown) {
-    // Handle server errors
+    const errorMessage =
+      err instanceof Error ? err.message : "Registration failed";
     return new Response(
       JSON.stringify({
         statusCode: 500,
         success: false,
-        message: err.message ?? "Registration failed",
+        message: errorMessage,
       }),
       { status: 500 }
     );

@@ -30,11 +30,13 @@ export async function GET(
       { status: 200 }
     );
   } catch (err: unknown) {
+    const errorMessage =
+      err instanceof Error ? err.message : "Flight Retrive failed";
     return new Response(
       JSON.stringify({
         statusCode: 500,
         success: false,
-        message: err.message ?? "Flight retrive failed",
+        message: errorMessage,
         data: null,
       }),
       { status: 500 }

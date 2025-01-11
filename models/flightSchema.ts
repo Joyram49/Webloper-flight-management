@@ -1,11 +1,6 @@
-import { IFlight } from "@/types/interfaces";
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-export interface IFlightModel extends IFlight, Document {
-  isDelete?: boolean;
-}
-
-const flightSchema = new Schema<IFlightModel>(
+const flightSchema = new Schema(
   {
     flightNumber: { type: String, required: true, unique: true },
     airline: { type: String, required: true },
@@ -22,5 +17,4 @@ const flightSchema = new Schema<IFlightModel>(
 );
 
 export const Flight =
-  mongoose.models.Flight ??
-  mongoose.model<IFlightModel>("Flight", flightSchema);
+  mongoose.models.Flight ?? mongoose.model("Flight", flightSchema);

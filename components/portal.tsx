@@ -7,8 +7,9 @@ type PortalProps = {
 };
 
 const Portal = ({ children }: PortalProps) => {
-  const mountElement: HTMLDivElement | null =
-    document.getElementById("portal-root");
+  const mountElement = document.getElementById(
+    "portal-root"
+  ) as HTMLDivElement | null;
   const elementDiv: HTMLDivElement = document.createElement("div");
 
   useEffect(() => {

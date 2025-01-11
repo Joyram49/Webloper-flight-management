@@ -1,16 +1,18 @@
 import { Flight } from "@/models/flightSchema";
-import { IFlightQueryParams } from "@/types/interfaces";
+import { IFlightQueryParams, IFlightsResponse } from "@/types/interfaces";
 
+// Update the return type of getAllFlight
 export const getAllFlight = async ({
   searchTerm = "",
   origin = "",
   destination = "",
   page,
   limit,
-}): IFlightQueryParams => {
+}: IFlightQueryParams): Promise<IFlightsResponse["data"]> => {
   const skip = (page - 1) * limit;
 
-  const query: unknown = {};
+  const query: { [key: string]: any } = {};
+
   if (searchTerm) {
     query.$or = [
       { flightNumber: { $regex: searchTerm, $options: "i" } },
@@ -23,10 +25,14 @@ export const getAllFlight = async ({
   if (destination) {
     query.destination = { $regex: destination, $options: "i" };
   }
-  const total = await Flight.countDocuments(query);
-  const limitedFligths = await Flight.find(query).skip(skip).limit(limit);
 
-  return { total, flights: limitedFligths };
+  const total = await Flight.countDocuments(query);
+  const limitedFlights = await Flight.find(query).skip(skip).limit(limit);
+
+  return {
+    meta: { page, limit, total },
+    data: limitedFlights,
+  };
 };
 
 export const getFlight = async (id: string) => {

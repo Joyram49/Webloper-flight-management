@@ -109,9 +109,10 @@ export default function RegistrationForm() {
         form.reset();
         router.push("/login");
       }
-    } catch (error: unknown) {
-      console.log(error.message);
-      setGeneralError(error.message);
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "An error occurred";
+      setGeneralError(errorMessage);
       form.reset();
     }
   };

@@ -41,11 +41,13 @@ export async function POST(request: Request) {
       }
     );
   } catch (err: unknown) {
+    const errorMessage =
+      err instanceof Error ? err.message : "Failed to create new flight";
     return new Response(
       JSON.stringify({
         statusCode: 500,
         success: false,
-        message: err?.message ?? "New flight created",
+        message: errorMessage,
         data: null,
       }),
       {

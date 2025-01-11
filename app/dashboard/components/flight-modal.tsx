@@ -26,9 +26,10 @@ function FlightDetailsModal({ flight, onClose }: FlightModalProps) {
           throw new Error(data.message || "Failed to fetch flight details.");
         }
         setSelectedFlight(data?.data);
-      } catch (error: unknown) {
-        console.error(error);
-        setError(error.message || "An error occurred.");
+      } catch (err: unknown) {
+        const errorMessage =
+          err instanceof Error ? err.message : "An error occurred";
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -91,79 +92,83 @@ function FlightDetailsModal({ flight, onClose }: FlightModalProps) {
         )}
 
         {/* Flight Details */}
-        <div className='bg-white p-6 rounded-lg shadow-md'>
-          <CardHeader className='text-center mb-6'>
-            <h2 className='text-3xl font-extrabold text-gray-800 tracking-tight'>
-              {selectedFlight.airline} - {selectedFlight.flightNumber}
-            </h2>
-          </CardHeader>
+        {selectedFlight && (
+          <div className='bg-white p-6 rounded-lg shadow-md'>
+            <CardHeader className='text-center mb-6'>
+              <h2 className='text-3xl font-extrabold text-gray-800 tracking-tight'>
+                {selectedFlight.airline} - {selectedFlight.flightNumber}
+              </h2>
+            </CardHeader>
 
-          <CardContent>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
-              {/* Left Column: Flight Info */}
-              <div className='space-y-4'>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>Origin:</strong>
-                  </p>
-                  <p className='text-lg text-gray-600'>
-                    {selectedFlight.origin}
-                  </p>
+            <CardContent>
+              <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
+                {/* Left Column: Flight Info */}
+                <div className='space-y-4'>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>Origin:</strong>
+                    </p>
+                    <p className='text-lg text-gray-600'>
+                      {selectedFlight.origin}
+                    </p>
+                  </div>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>Destination:</strong>
+                    </p>
+                    <p className='text-lg text-gray-600'>
+                      {selectedFlight.destination}
+                    </p>
+                  </div>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>Price:</strong>
+                    </p>
+                    <p className='text-lg font-semibold text-gray-800'>
+                      ${selectedFlight.price}
+                    </p>
+                  </div>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>Available Seats:</strong>
+                    </p>
+                    <p className='text-lg text-gray-600'>
+                      {selectedFlight.availableSeats}
+                    </p>
+                  </div>
                 </div>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>Destination:</strong>
-                  </p>
-                  <p className='text-lg text-gray-600'>
-                    {selectedFlight.destination}
-                  </p>
-                </div>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>Price:</strong>
-                  </p>
-                  <p className='text-lg font-semibold text-gray-800'>
-                    ${selectedFlight.price}
-                  </p>
-                </div>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>Available Seats:</strong>
-                  </p>
-                  <p className='text-lg text-gray-600'>
-                    {selectedFlight.availableSeats}
-                  </p>
+
+                {/* Right Column: Departure Time */}
+                <div className='space-y-4'>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>Departure Date:</strong>
+                    </p>
+                    <p className='text-lg text-gray-600'>
+                      {selectedFlight.date}
+                    </p>
+                  </div>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>Start Time:</strong>
+                    </p>
+                    <p className='text-lg text-gray-600'>
+                      {selectedFlight.startTime}
+                    </p>
+                  </div>
+                  <div className='flex justify-between'>
+                    <p className='text-lg font-medium text-gray-700'>
+                      <strong>End Time:</strong>
+                    </p>
+                    <p className='text-lg text-gray-600'>
+                      {selectedFlight.endTime}
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              {/* Right Column: Departure Time */}
-              <div className='space-y-4'>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>Departure Date:</strong>
-                  </p>
-                  <p className='text-lg text-gray-600'>{selectedFlight.date}</p>
-                </div>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>Start Time:</strong>
-                  </p>
-                  <p className='text-lg text-gray-600'>
-                    {selectedFlight.startTime}
-                  </p>
-                </div>
-                <div className='flex justify-between'>
-                  <p className='text-lg font-medium text-gray-700'>
-                    <strong>End Time:</strong>
-                  </p>
-                  <p className='text-lg text-gray-600'>
-                    {selectedFlight.endTime}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </div>
+            </CardContent>
+          </div>
+        )}
       </div>
     </div>
   );

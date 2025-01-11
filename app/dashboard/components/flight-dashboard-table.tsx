@@ -1,11 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useDebounce } from "@/app/hooks/useDebounce";
 import Portal from "@/components/portal";
-import {
-  IFlight,
-  IFlightQueryParams,
-  IFlightsResponse,
-} from "@/types/interfaces";
+import { IData, IFlight, IFlightQueryParams } from "@/types/interfaces";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import AddFlightFormModal from "./add-flight-form-modal";
@@ -13,7 +8,7 @@ import FlightDetailsModal from "./flight-modal";
 import Pagination from "./pagination";
 
 type FlightDashboardTableProps = {
-  data: IFlightsResponse;
+  data: IData;
   onSearch: (params: Partial<IFlightQueryParams>) => void;
 };
 
@@ -21,15 +16,14 @@ export default function FlightDashboardTable({
   data,
   onSearch,
 }: FlightDashboardTableProps) {
-  const {
-    data: filteredFlights,
-    meta: { total, page, limit },
-  } = data?.data || [];
-
   const searchParams = useSearchParams();
   const preSearchTerm = searchParams.get("searchTerm");
   const preOrigin = searchParams.get("origin");
   const preDestinantion = searchParams.get("destination");
+  const {
+    data: flightsData,
+    meta: { total, page, limit },
+  } = data || {};
 
   // Initialize state from URL query params or default values
   const [searchTerm, setSearchTerm] = useState<string>(preSearchTerm || "");
@@ -38,7 +32,7 @@ export default function FlightDashboardTable({
   const [itemsPerPage, setItemsPerPage] = useState<string>(
     limit.toString() || "10"
   );
-  const [currentPage, setCurrentPage] = useState<number>(page);
+  const [currentPage, setCurrentPage] = useState<number>(Number(page));
 
   // handle modal state
   const [selectedFlight, setSelectedFlight] = useState<IFlight | null>(null);
@@ -82,8 +76,8 @@ export default function FlightDashboardTable({
       limit: Number(debouncedItemsPerPage),
     };
 
-    // Trigger the search function
     onSearch(queryParams);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     debouncedSearchTerm,
     debouncedOrigin,
@@ -92,12 +86,14 @@ export default function FlightDashboardTable({
     currentPage,
   ]);
 
-  // Pagination logic
+  // Ensure data is available before accessing
+
   const totalPages = Math.ceil(total / Number(itemsPerPage));
+
   const handleItemsPerPage = (value: string) => {
     const parsedValue = parseInt(value, 10);
     if (!isNaN(parsedValue) && parsedValue >= 0) {
-      setItemsPerPage(parsedValue);
+      setItemsPerPage(parsedValue.toString());
     } else if (value === "") {
       setItemsPerPage("");
     }
@@ -146,7 +142,6 @@ export default function FlightDashboardTable({
       </div>
 
       {/* Table */}
-
       <table className='w-full border-collapse border border-gray-300'>
         <thead>
           <tr>
@@ -160,48 +155,52 @@ export default function FlightDashboardTable({
             </th>
           </tr>
         </thead>
-        <tbody>
-          {filteredFlights.length === 0 ? (
-            <tr className='text-center  '>
-              <td colSpan={6} className='px-4 py-10 font-medium font-mono'>
-                No flights found!
-              </td>
-            </tr>
-          ) : (
-            filteredFlights?.map((flight: IFlight) => (
-              <tr
-                key={flight._id}
-                onClick={() => handleFlightClick(flight)}
-                className='cursor-pointer hover:bg-[#dde0e0]'
-              >
-                <td className='border border-gray-300 px-4 py-2'>
-                  {flight.flightNumber}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {flight.airline}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {flight.origin}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {flight.destination}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {flight.price}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {flight.availableSeats}
+        {data && data.data ? (
+          <tbody>
+            {flightsData.length === 0 ? (
+              <tr className='text-center'>
+                <td colSpan={6} className='px-4 py-10 font-medium font-mono'>
+                  No flights found!
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
+            ) : (
+              flightsData.map((flight: IFlight) => (
+                <tr
+                  key={flight.flightNumber}
+                  onClick={() => handleFlightClick(flight)}
+                  className='cursor-pointer hover:bg-[#dde0e0]'
+                >
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {flight.flightNumber}
+                  </td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {flight.airline}
+                  </td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {flight.origin}
+                  </td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {flight.destination}
+                  </td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {flight.price}
+                  </td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {flight.availableSeats}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        ) : (
+          <div>Loading...</div>
+        )}
       </table>
 
       <Pagination
         currentPage={currentPage}
         handleItemsPerPage={handleItemsPerPage}
-        itemsPerPage={itemsPerPage}
+        itemsPerPage={Number(itemsPerPage)}
         setCurrentPage={setCurrentPage}
         totalPages={totalPages}
       />

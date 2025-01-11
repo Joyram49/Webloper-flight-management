@@ -10,7 +10,7 @@ import {
 
 type PaginatedItemsProps = {
   currentPage: number;
-  totalPage: number;
+  totalPages: number;
   onPageChange: (page: number) => void;
 };
 
@@ -70,7 +70,7 @@ function PaginatedItems({
               ) : (
                 <PaginationLink
                   isActive={currentPage === page}
-                  onClick={() => onPageChange(page)}
+                  onClick={() => onPageChange(Number(page))}
                 >
                   {page}
                 </PaginationLink>

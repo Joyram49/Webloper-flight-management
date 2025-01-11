@@ -9,7 +9,8 @@ export default async function dbConnect() {
     console.log("successfully connceted to mongo database");
     return conn;
   } catch (err) {
-    console.error(err);
-    throw new Error(err.message);
+    const errMessage =
+      err instanceof Error ? err.message : "Failed to connect to database";
+    throw new Error(errMessage);
   }
 }

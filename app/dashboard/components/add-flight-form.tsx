@@ -69,7 +69,7 @@ const flightSchema = z
     {
       message:
         "Start time must be after the date, and end time must be after start time.",
-      path: ["global"], // Attach the error to `startTime`
+      path: ["root"],
     }
   );
 
@@ -110,11 +110,12 @@ export default function AddNewFlghtForm({ onClose }: FlightFormProps) {
       }
       form.reset();
       onClose();
-    } catch (error: unknown) {
-      console.error("Error submitting flight: ", error);
-      form.setError("global", {
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error ? err.message : "failed to add new flight";
+      form.setError("root", {
         type: "manual",
-        message: error?.message || "failed to add new flight",
+        message: errorMessage,
       });
     }
   };
@@ -308,9 +309,9 @@ export default function AddNewFlghtForm({ onClose }: FlightFormProps) {
           )}
         </div>
 
-        {errors?.global && (
+        {errors?.root && (
           <p className='text-red-500 font-robotoSlab font-medium text-sm'>
-            *{errors?.global?.message}
+            *{errors?.root?.message}
           </p>
         )}
       </form>

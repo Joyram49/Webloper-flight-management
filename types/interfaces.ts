@@ -7,6 +7,7 @@ export interface IUser {
 }
 
 export interface IFlight {
+  _id?: string;
   flightNumber: string;
   airline: string;
   origin: string;
@@ -32,12 +33,14 @@ export interface IMeta {
   total: number;
 }
 
+export interface IData {
+  meta: IMeta;
+  data: IFlight[];
+}
+
 export interface IFlightsResponse {
   statusCode: number;
   success: boolean;
   message: string;
-  data: {
-    meta: IMeta;
-    data: IFlight[];
-  } | null;
+  data?: IData;
 }
