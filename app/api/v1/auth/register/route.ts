@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { User } from "@/models/userSchema";
 import dbConnect from "@/services/connectMongo";
 import { IUser } from "@/types/interfaces";
@@ -37,7 +38,8 @@ export async function POST(request: Request) {
     const savedUser = await newUser.save();
 
     // Exclude the password from the response
-    const { password: _, ...userWithoutPassword } = savedUser.toObject();
+    const { password: exludedPassword, ...userWithoutPassword } =
+      savedUser.toObject();
 
     // Return a success response
     return new Response(
